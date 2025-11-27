@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ยืนยันการลบคิว - ระบบจัดคิวรถ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #d32f2f;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .info {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .info p {
+            margin: 5px 0;
+            color: #856404;
+        }
+        .warning {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            color: #721c24;
+            text-align: center;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-align: center;
+            text-decoration: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚠️ ยืนยันการลบคิว</h1>
+        
+        <div class="info">
+            <p><strong>ชื่อผู้ใช้บริการ:</strong> {{ shuttle.user_name }}</p>
+            <p><strong>จุดรับ:</strong> {{ shuttle.pickup_location }}</p>
+            <p><strong>จุดส่ง:</strong> {{ shuttle.dropoff_location }}</p>
+            <p><strong>เวลา:</strong> {{ shuttle.start_time|date:"d/m/Y H:i" }}</p>
+            <p><strong>สถานะ:</strong> {{ shuttle.get_status_display }}</p>
+        </div>
+        
+        <div class="warning">
+            <strong>คุณแน่ใจหรือไม่ว่าต้องการลบคิวนี้?</strong><br>
+            การดำเนินการนี้ไม่สามารถย้อนกลับได้
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="btn-group">
+                <button type="submit" class="btn btn-danger">ยืนยันการลบ</button>
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary">ยกเลิก</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

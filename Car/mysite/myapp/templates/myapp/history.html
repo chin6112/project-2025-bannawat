@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ประวัติการจอง</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      display: flex;
+      background: #f7f2e9;
+    }
+    .sidebar {
+      width: 200px;
+      background: #d9d7d3;
+      height: 100vh;
+      padding: 20px;
+    }
+    .sidebar a {
+      display: block;
+      margin-bottom: 10px;
+      text-decoration: none;
+      color: black;
+    }
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #e2e0dd;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #bbb;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Chatbot</h2>
+  <a href="/dashboard/">Dashboard</a>
+  <a href="/history/">ประวัติที่เคยจอง</a>
+  <a href="/logout/">ออกจากระบบ</a>
+</div>
+
+<div class="content">
+  <h2>ประวัติการจอง</h2>
+
+  <!-- ฟอร์มค้นหา -->
+  <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+    <form method="get" style="display: flex; gap: 15px; align-items: end; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 200px;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">ชื่อผู้ใช้:</label>
+        <input type="text" name="name" value="{{ search_name }}" placeholder="ค้นหาชื่อ..." 
+               style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
+      </div>
+      
+      <div style="flex: 1; min-width: 150px;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">จากวันที่:</label>
+        <input type="date" name="date_from" value="{{ date_from }}" 
+               style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
+      </div>
+      
+      <div style="flex: 1; min-width: 150px;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">ถึงวันที่:</label>
+        <input type="date" name="date_to" value="{{ date_to }}" 
+               style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
+      </div>
+      
+      <div style="display: flex; gap: 10px;">
+        <button type="submit" style="padding: 8px 20px; background: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+          🔍 ค้นหา
+        </button>
+        <a href="/history/" style="padding: 8px 20px; background: #6c757d; color: white; border: none; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: bold;">
+          🔄 รีเซ็ต
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>วันที่</th>
+        <th>ชื่อ</th>
+        <th>ต้นทาง</th>
+        <th>ปลายทาง</th>
+        <th>เวลา</th>
+        <th>สถานะ</th>
+        <th>รถ/คนขับ</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for q in history %}
+      <tr>
+        <td>{{ q.start_time|date:"d/m/Y" }}</td>
+        <td>{{ q.user_name }}</td>
+        <td>{{ q.pickup_location }}</td>
+        <td>{{ q.dropoff_location }}</td>
+        <td>{{ q.start_time|time:"H:i" }}</td>
+        <td>{{ q.get_status_display }}</td>
+        <td>
+          {% if q.car %}{{ q.car.license_plate }}{% endif %}
+          {% if q.driver %}/ {{ q.driver.name }}{% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" style="text-align: center; padding: 20px; color: #888;">
+          ไม่พบข้อมูลตามเงื่อนไขที่กำหนด
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <div style="margin-top: 15px; color: #666;">
+    ทั้งหมด {{ history|length }} รายการ
+  </div>
+</div>
+
+</body>
+</html>

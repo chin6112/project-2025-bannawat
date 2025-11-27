@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>เข้าสู่ระบบ</title>
+  <style>
+    body {
+      background: #f7f2e9;
+      font-family: sans-serif;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+    .login-box {
+      background: #e5e3df;
+      padding: 40px;
+      border-radius: 20px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.15);
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #ffb74d;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="login-box">
+  <h2>chatbot</h2>
+  <p>เข้าสู่ระบบสำหรับแอดมิน</p>
+
+  <form method="POST">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="ชื่อผู้ใช้" required>
+    <input type="password" name="password" placeholder="รหัสผ่าน" required>
+    <button type="submit">เข้าสู่ระบบ</button>
+  </form>
+
+  {% if error %}
+  <p style="color:red; font-size:13px;">{{ error }}</p>
+  {% endif %}
+</div>
+</body>
+</html>

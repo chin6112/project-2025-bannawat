@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      display: flex;
+      background: #f7f2e9;
+    }
+    .sidebar {
+      width: 200px;
+      background: #d9d7d3;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .sidebar a {
+      display: block;
+      padding: 10px 0;
+      color: black;
+      text-decoration: none;
+      margin-bottom: 10px;
+    }
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .admin-badge {
+      padding: 8px 16px;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #777;
+    }
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-right: 10px;
+      font-size: 14px;
+      color: white;
+    }
+    .btn-add { background: #4caf50; }
+    .btn-edit { background: #ffeb3b; color:black; }
+    .btn-delete { background: #e53935; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #e2e0dd;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #bbb;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Chatbot</h2>
+  <a href="/dashboard/">Dashboard</a>
+  <a href="/history/">ประวัติที่เคยจอง</a>
+  <a href="/logout/">ออกจากระบบ</a>
+</div>
+
+<div class="content">
+  <div class="header-bar">
+    <h2>Dashboard</h2>
+    <div class="admin-badge">admin</div>
+  </div>
+
+  <div style="margin-bottom:15px;">
+    <a href="{% url 'queue_create' %}" class="btn btn-add" style="text-decoration:none; display:inline-block;">➕ เพิ่มคิว</a>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ชื่อ</th>
+        <th>ต้นทาง</th>
+        <th>ปลายทาง</th>
+        <th>เวลา</th>
+        <th>สถานะ</th>
+        <th>รถ/คนขับ</th>
+        <th>การจัดการ</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for q in queue_list %}
+      <tr>
+        <td>{{ q.user_name }}</td>
+        <td>{{ q.pickup_location }}</td>
+        <td>{{ q.dropoff_location }}</td>
+        <td>{{ q.start_time|date:"d/m/Y H:i" }}</td>
+        <td>{{ q.get_status_display }}</td>
+        <td>
+          {% if q.car %}{{ q.car.license_plate }}{% endif %}
+          {% if q.driver %}/ {{ q.driver.name }}{% endif %}
+        </td>
+        <td>
+          <a href="{% url 'queue_edit' q.id %}" class="btn btn-edit" style="text-decoration:none; display:inline-block;">✏️ แก้ไข</a>
+          <a href="{% url 'queue_delete' q.id %}" class="btn btn-delete" style="text-decoration:none; display:inline-block;">🗑️ ลบ</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" style="text-align:center; padding:20px;">ไม่มีคิววันนี้</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+</body>
+</html>
